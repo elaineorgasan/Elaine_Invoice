@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta class="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Sample_Invoice</title>
+
+    <style>
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 5px;
+            background-color: rgb(238, 238, 237);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 20px 20px;
+        }
+
+        .input-group-text {
+            padding-bottom: 3px;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            // Calculate total on keyup event for price inputs
+            $(document).on('keyup', '.quantity, .price, .adjustment', function () {
+                calculateTotal();
+            });
+
+            function calculateTotal() {
+                var total = 0;
+
+                // Loop through each row in the table
+                $('.invoiceTable tbody tr').each(function () {
+                    var quantity = parseFloat($(this).find('.quantity').val()) || 0;
+                    var price = parseFloat($(this).find('.price').val()) || 0;
+
+                    // Calculate subtotal for each row
+                    var subtotal = quantity * price;
+                    $(this).find('.amountP').val(subtotal.toFixed(2));
+
+                    // Add subtotal to the total
+                    total += subtotal;
+                });
+
+                // Update the total in the HTML
+                var adjustment = parseFloat($('.adjustment').val()) || 0;
+                var amountT = total + adjustment;
+                $('.amountT').val(amountT.toFixed(2));
+            }
+
+            $('#btnAdd').on('click', function () {
+                var newRow = $('#trow').clone().removeAttr('id').removeClass('d-none');
+                newRow.find('input').val('');
+                $('.invoiceTable tbody').append(newRow);
+            });
+
+            $(document).on('click', '.btnDel', function () {
+            var rowCount = $('.invoiceTable tbody tr').length;
+
+            if (rowCount > 1) {
+                $(this).closest('tr').remove();
+                calculateTotal();
+            } else {
+                alert('Cannot delete all rows. At least one row is required.');
+            }
+        });
+
+        });
+
+//         // Add Row Function
+// $('#btnAdd').on('click', function () {
+//     var newRow = $('#trow').clone().removeAttr('id').removeClass('d-none');
+//     newRow.find('input').val('');
+//     $('.invoiceTable tbody').append(newRow);
+// });
+
+// // Remove Selected Rows Function
+// $(document).on('click', '.btnDel', function () {
+//     $(this).closest('tr').remove();
+//     calculateTotal();
+// });
+
+// // Additional function to remove specific rows based on condition
+// function removeRowsBasedOnCondition(condition) {
+//     // Modify the condition as needed
+//     $('.invoiceTable tbody tr').each(function () {
+//         var row = $(this);
+//         if (condition(row)) {
+//             row.remove();
+//         }
+//     });
+
+//     // Add new rows after removing specific rows
+//     addNewRows();
+//     calculateTotal();
+// }
+
+// // Additional function to add new rows
+// function addNewRows() {
+//     var newRow1 = $('#trow').clone().removeAttr('id').removeClass('d-none');
+//     newRow1.find('input').val('');
+
+//     var newRow2 = $('#trow').clone().removeAttr('id').removeClass('d-none');
+//     newRow2.find('input').val('');
+
+//     $('.invoiceTable tbody').append(newRow1, newRow2);
+// }
+
+// // Example of removing rows where the quantity is less than 5
+// $('#btnRemoveRowsCondition').on('click', function () {
+//     removeRowsBasedOnCondition(function (row) {
+//         var quantity = parseInt(row.find('input[name="quantity[]"]').val());
+//         return quantity < 5;
+//     });
+// });
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2><b>Billing Invoice</b></h2>
+                </div>
+
+                <div class="card body">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="col-sm-4 p-3">
+                                <span class="input-group-text" id="basic-addon1">Invoice for (Name):</span>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-sm-4 p-3">
+                                <span class="input-group-text" id="basic-addon1">Payable to:</span>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-sm-4 p-3">
+                                <span class="input-group-text" id="basic-addon1">Invoice Number:</span>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div class="col-md-4">  
+                         
+                            <div class="col-sm-4 p-3">
+                                <span class="input-group-text">Due Date:</span>
+                                <input type="text"class="form-control" >
+                               
+                            </div>
+                            <div class="col-sm-4 p-3">
+                                <span class="input-group-text" id="basic-addon1">Company Name:</span>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-sm-4 p-3">
+                                <span class="input-group-text" id="basic-addon1">Address:</span>
+                                <input type="text"class="form-control"> <br>
+                            </div>
+                        </div>    
+                    </div>    
+                </div> 
+            </div> 
+                    <div class="col-md-12 mt-2">
+                        <table class="invoiceTable table table-bordered table-hover">
+                            <thead class="table-success">
+                                <tr>
+                                    <th scope="col" class="text-end text-center btn-primary">Item Name</th>
+                                    <th scope="col" class="text-end text-center btn-primary">Quantity</th>
+                                    <th scope="col" class="text-end text-center btn-primary">Item Price</th>
+                                    <th scope="col" class="text-end text-center btn-primary">Total Price</th>
+                                    <th scope="col" class="text-end text-center btn-primary">Actions</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="trow" class="d-none">
+                                    <td><input type="text" placeholder="Item Name" name="Item1" value="Item1"></td>
+                                    <td><input type="number" class = "quantity" placeholder="Quantity" oninput="this.value= this.value.replace(/[^0-9]/g, '-')"></td>
+                                    <td><input type="number" class = "price" placeholder="Item Price" name="UnitPrice" value="100"oninput="this.value= this.value.replace(/[^0-9]/g, '-')"></td>
+                                    <td><input type="number" placeholder="Total Price" class="amountP" class="form-control" name="Price" disabled></td>
+                                    <td><button type="button" class="btn btn-danger btn-block btnDel">Delete Item</button></td>
+                                </tr>
+
+                                <tr id="trow" class="d-none">
+                                    <td><input type="text" placeholder="Item Name" name="Item2" value="Item2"></td>
+                                    <td><input type="number" class = "quantity" placeholder="Quantity" oninput="this.value= this.value.replace(/[^0-9]/g, '-')"></td>
+                                    <td><input type="number" class = "price" placeholder="Item Price" name="UnitPrice" value="200"oninput="this.value= this.value.replace(/[^0-9]/g, '-')"></td>
+                                    <td><input type="number" placeholder="Total Price" class="amountP" class="form-control" name="Price" disabled></td>
+                                    <td><button type="button" class="btn btn-danger btn-block btnDel">Delete Item</button></td>
+                                </tr>
+                            </tbody>
+
+                                    <button type="button" class="btn btn-success" id="btnAdd">Add Item</button><br><br>          
+                        </table> 
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td colspan="1">
+                                    <b>Adjustment: </b><br>
+                                    <input type="number" class="adjustment"><br><br>
+                                    <b>Total Amount: </b><br>
+                                    <input type="Text" class="amountT" disabled><br><br>
+                                    </td>
+                                </tr>       
+    </body>
+
+</html>
