@@ -75,54 +75,7 @@
         });
 
         });
-
-//         // Add Row Function
-// $('#btnAdd').on('click', function () {
-//     var newRow = $('#trow').clone().removeAttr('id').removeClass('d-none');
-//     newRow.find('input').val('');
-//     $('.invoiceTable tbody').append(newRow);
-// });
-
-// // Remove Selected Rows Function
-// $(document).on('click', '.btnDel', function () {
-//     $(this).closest('tr').remove();
-//     calculateTotal();
-// });
-
-// // Additional function to remove specific rows based on condition
-// function removeRowsBasedOnCondition(condition) {
-//     // Modify the condition as needed
-//     $('.invoiceTable tbody tr').each(function () {
-//         var row = $(this);
-//         if (condition(row)) {
-//             row.remove();
-//         }
-//     });
-
-//     // Add new rows after removing specific rows
-//     addNewRows();
-//     calculateTotal();
-// }
-
-// // Additional function to add new rows
-// function addNewRows() {
-//     var newRow1 = $('#trow').clone().removeAttr('id').removeClass('d-none');
-//     newRow1.find('input').val('');
-
-//     var newRow2 = $('#trow').clone().removeAttr('id').removeClass('d-none');
-//     newRow2.find('input').val('');
-
-//     $('.invoiceTable tbody').append(newRow1, newRow2);
-// }
-
-// // Example of removing rows where the quantity is less than 5
-// $('#btnRemoveRowsCondition').on('click', function () {
-//     removeRowsBasedOnCondition(function (row) {
-//         var quantity = parseInt(row.find('input[name="quantity[]"]').val());
-//         return quantity < 5;
-//     });
-// });
-
+        
     </script>
 </head>
 
